@@ -1,0 +1,10 @@
+# Ignorar el directorio de configuración de IntelliJ
+/src/.idea/
+
+# Archivos de la configuración del espacio de trabajo
+*.iml
+*.iws
+*.ipr
+
+# Directorio de salida de compilación
+/src/out/

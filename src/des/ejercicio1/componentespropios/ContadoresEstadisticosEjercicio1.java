@@ -14,6 +14,7 @@ public  class ContadoresEstadisticosEjercicio1 extends ContadoresEstadisticos {
 	private int cantSolicitudesProcesadas;
 	private int[] cantPorClase;
 	private int[] accPorClase;
+
 	@Override
 	public void inicializar() {
 		cantSolicitudesProcesadas = 0;
@@ -26,15 +27,19 @@ public  class ContadoresEstadisticosEjercicio1 extends ContadoresEstadisticos {
 		}
 	}
 
-	public void actualizarCantProcesadas(Solicitud solicitud) {
-		int claseIdx = solicitud.getClase() -1;
-		cantPorClase[claseIdx]++;
-		accPorClase[claseIdx] += solicitud.getTiempoDeProcesamiento();
+	public void actualizarCantProcesadas() {
 		cantSolicitudesProcesadas++;
 	}
+
+	public void actualizarCantYAccProcesadasPorClase(int clase) {
+		cantPorClase[clase-1]++;
+		accPorClase[clase-1]++;
+	}
+
 	public int getCantSolicitudesProcesadas() {
 		return cantSolicitudesProcesadas;
 	}
+
 	public double[] obtenerPromediosPorClase() {
 		double[] promedios = new double[4];
 		for (int i = 0; i < 4; i++) {

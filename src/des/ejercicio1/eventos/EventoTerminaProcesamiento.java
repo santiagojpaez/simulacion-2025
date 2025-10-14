@@ -31,10 +31,12 @@ public class EventoTerminaProcesamiento extends Evento {
 			modeloActual.atenderSolicitud(solicitudAProcesar);
 			double duracionDelProcesamiento = libreriaActual.tiempoDeProcesamiento();
 			solicitudAProcesar.setTiempoDeProcesamiento(duracionDelProcesamiento);
-			contadoresEjemplo.actualizarCantProcesadas(solicitudAProcesar)
+			contadoresEjemplo.actualizarCantYAccProcesadasPorClase(solicitudAProcesar.getClase());
+			contadoresEjemplo.actualizarCantProcesadas();
 			EventoTerminaProcesamiento nuevoEvento = new EventoTerminaProcesamiento(duracionDelProcesamiento);	
 			eventos.agregar(nuevoEvento);	
 		}
+
 		else {
 			modeloActual.actualizarServidorDisponible();
 		}

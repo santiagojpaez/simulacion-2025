@@ -1,94 +1,117 @@
 package des;
 
-import seguimiento3.eventos.EventoArribarACola;
 import seguimiento3.componentesPropios.ContadoresEstadisticosSeguimiento3;
 import seguimiento3.componentesPropios.GeneradorDeReportesSeguimiento3;
 import seguimiento3.componentesPropios.LibreriaDeRutinasSeguimiento3;
 import seguimiento3.estadoDelSistema.EstadoSeguimiento3;
+import seguimiento3.eventos.EventoArribarACola;
 
-/* Subprograma que invoca a la Rutina de Tiempo para determinar evento inminente, 
- * transfiriendo el control a la Rutina de Evento asociada para que actualice el
- * Estado del Sistema. */
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ProgramaPrincipal {
-
-	//NO MODIFICAR! Creación de los componentes propios del ejemplo.
-	private static EstadoDelSistema modelo;		
+	private static EstadoDelSistema modelo;
 	private static ContadoresEstadisticos contadores;
-	private static GeneradorDeReportes reporte;
+	private static GeneradorDeReportesSeguimiento3 reporte;
 	private static LibreriaDeRutinas libreria;
 	private static ListaDeEventos eventos;
-	
-	// NO MODIFICAR!
+
 	public static void main(String[] args) {
+		int cantidadDeCorridas = 1000; // Definir la cantidad de corridas
+		List<Map<String, Double>> resultadosTotales = new ArrayList<>();
 
-		//Creación de los componentes propios del ejemplo a ejecutar.
-		crearComponentesDependientes();
-		
-		//Creación de los componentes generales.
-		RutinaDeInicializacion inicializacion = new RutinaDeInicializacion();
-		RutinaDeTiempo manejoDeTiempo = new RutinaDeTiempo();
-		RelojDeSimulacion reloj = new RelojDeSimulacion();
-
-		System.out.println("------------------------------------------------------");
-		System.out.println("***INICIALIZACION");
-		System.out.println("------------------------------------------------------");
-		
-		//Flujo de control
-		inicializacion.run(reloj,modelo,contadores,eventos,libreria);
-		
-		do { 
-			
+		for (int i = 0; i < cantidadDeCorridas; i++) {
 			System.out.println("------------------------------------------------------");
-			System.out.println("***PROGRAMA PRINCIPAL *** t=" + reloj.getValor());
+			System.out.println("*** INICIO DE LA CORRIDA " + (i + 1) + " ***");
 			System.out.println("------------------------------------------------------");
-						
-			//Invocar a la rutina de tiempo.
-			Evento eventoPorEjecutar = manejoDeTiempo.run(eventos,reloj);
-			
-			System.out.println("\t\t-- El SIMULADOR determina que el EVENTO MAS INMINENTE se dará en " + eventoPorEjecutar.getTiempoQueFaltaParaQueOcurra() + " unidades de tiempo.");
-			System.out.println("\t\t-- El SIMULADOR actualiza el RELOJ para ejecutar el EVENTO MAS INMINENTE del tipo " + eventoPorEjecutar.getClass().getSimpleName() + ".");
-			
-			//Invocar a la rutina de evento.
-			eventoPorEjecutar.rutinaDeEvento(modelo,contadores,eventos,libreria);
-			
-		}while(!terminoLaSimulacion(reloj,contadores));
-		
-		reporte.run(contadores);
 
+			// Crear componentes y ejecutar simulación
+			crearComponentesDependientes();
+			ejecutarSimulacion();
+
+			// Generar reporte y almacenar resultados
+			Map<String, Double> resultados = reporte.run((ContadoresEstadisticosSeguimiento3) contadores);
+			resultadosTotales.add(resultados);
+		}
+
+		// Escribir resultados en un archivo CSV
+		escribirResultadosEnCSV(resultadosTotales);
 	}
 
-	//MODIFICAR para indicar el Estado del Sistema a Simnular
 	private static void crearComponentesDependientes() {
-		//TODO Aca se crean los componentes propios del modelo a ejecutar.
 		modelo = new EstadoSeguimiento3();
 		contadores = new ContadoresEstadisticosSeguimiento3();
 		reporte = new GeneradorDeReportesSeguimiento3();
 		libreria = new LibreriaDeRutinasSeguimiento3();
-		Evento primerEvento =
-				new EventoArribarACola(((LibreriaDeRutinasSeguimiento3) libreria).tiempoEntreArribosSolicitudes());
+		Evento primerEvento = new EventoArribarACola(((LibreriaDeRutinasSeguimiento3) libreria).tiempoEntreArribosSolicitudes());
 		eventos = new ListaDeEventos(primerEvento);
 	}
 
-	//MODIFICAR para indicar el estado de Fin de Simulación
-	private static boolean terminoLaSimulacion(RelojDeSimulacion reloj, ContadoresEstadisticos contadores) {
-		//TODO Aca se debe programar según el fin sea por tiempo o cantidad.
-		
-		//Ejemplo por tiempo
-		Integer tiempoDeSimulacion = 480;
-		if(reloj.getValor() >= tiempoDeSimulacion) {
-			ContadoresEstadisticosSeguimiento3 cont= (ContadoresEstadisticosSeguimiento3) contadores;
-			cont.setearTiempoDeTurno(tiempoDeSimulacion.doubleValue());
-			return true;
-		};
-		return false;
-		
-		//Ejemplo por cantidad: "Que se hayan procesado 15 solicitudes."
-		/*ContadoresEstadisticosEjemplo contadorEjemplo = (ContadoresEstadisticosEjemplo) contadores;
-		int cantidadDeSimulacion = contadorEjemplo.getCantProcesadas(), topeDeSimulacion=15;
-		if(cantidadDeSimulacion >= topeDeSimulacion) return true;
-		return false;*/
-		
+	private static void ejecutarSimulacion() {
+		RutinaDeInicializacion inicializacion = new RutinaDeInicializacion();
+		RutinaDeTiempo manejoDeTiempo = new RutinaDeTiempo();
+		RelojDeSimulacion reloj = new RelojDeSimulacion();
+
+		inicializacion.run(reloj, modelo, contadores, eventos, libreria);
+
+		do {
+			Evento eventoPorEjecutar = manejoDeTiempo.run(eventos, reloj);
+			eventoPorEjecutar.rutinaDeEvento(modelo, contadores, eventos, libreria);
+		} while (!terminoLaSimulacion(reloj, contadores));
+
+		((ContadoresEstadisticosSeguimiento3) contadores).setearTiempoDeTurno(480.0);
 	}
 
+	private static boolean terminoLaSimulacion(RelojDeSimulacion reloj, ContadoresEstadisticos contadores) {
+		return reloj.getValor() >= 480;
+	}
+
+	private static void escribirResultadosEnCSV(List<Map<String, Double>> resultadosTotales) {
+		try (FileWriter writer = new FileWriter("resultados_simulacion.csv")) {
+			writer.write("Corrida,Beneficio,PromedioTiempoEnCola,TasaDeAtencion,PorcentajeTiempoLibre,UtilizacionEmpleada\n");
+			double sumaBeneficio = 0.0;
+			double sumaPromedioTiempoEnCola = 0.0;
+			double sumaTasaDeAtencion = 0.0;
+			double sumaPorcentajeTiempoLibre = 0.0;
+			double sumaUtilizacionEmpleada = 0.0;
+
+			for (int i = 0; i < resultadosTotales.size(); i++) {
+				Map<String, Double> resultados = resultadosTotales.get(i);
+				writer.write(String.format("%d,%.4f,%.4f,%.4f,%.2f,%.2f\n",
+						i + 1,
+						resultados.get("Beneficio"),
+						resultados.get("PromedioTiempoEnCola"),
+						resultados.get("TasaDeAtencion"),
+						resultados.get("PorcentajeTiempoLibre"),
+						resultados.get("UtilizacionEmpleada")));
+				sumaBeneficio += resultados.get("Beneficio");
+				sumaPromedioTiempoEnCola += resultados.get("PromedioTiempoEnCola");
+				sumaTasaDeAtencion += resultados.get("TasaDeAtencion");
+				sumaPorcentajeTiempoLibre += resultados.get("PorcentajeTiempoLibre");
+				sumaUtilizacionEmpleada += resultados.get("UtilizacionEmpleada");
+			}
+
+			int totalCorridas = resultadosTotales.size();
+			double promedioBeneficio = sumaBeneficio / totalCorridas;
+			double promedioTiempoEnCola = sumaPromedioTiempoEnCola / totalCorridas;
+			double promedioTasaDeAtencion = sumaTasaDeAtencion / totalCorridas;
+			double promedioPorcentajeTiempoLibre = sumaPorcentajeTiempoLibre / totalCorridas;
+			double promedioUtilizacionEmpleada = sumaUtilizacionEmpleada / totalCorridas;
+
+			// Imprimir los promedios en consola
+			System.out.println("Promedios de las corridas:");
+			System.out.printf("Promedio Beneficios totales %.4f\n",promedioBeneficio);
+			System.out.printf("Promedio Tiempo en Cola: %.4f\n", promedioTiempoEnCola);
+			System.out.printf("Promedio Tasa de Atención: %.4f\n", promedioTasaDeAtencion);
+			System.out.printf("Promedio Porcentaje Tiempo Libre: %.2f\n", promedioPorcentajeTiempoLibre);
+			System.out.printf("Promedio Utilización Empleada: %.2f\n", promedioUtilizacionEmpleada);
+
+			System.out.println("Resultados guardados en 'resultados_simulacion.csv'.");
+		} catch (IOException e) {
+			System.err.println("Error al escribir el archivo CSV: " + e.getMessage());
+		}
+	}
 }

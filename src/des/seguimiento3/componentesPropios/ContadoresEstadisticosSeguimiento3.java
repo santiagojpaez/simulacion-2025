@@ -12,13 +12,17 @@ import des.ContadoresEstadisticos;
 public  class ContadoresEstadisticosSeguimiento3 extends ContadoresEstadisticos {
 	private Integer beneficioTotal = 0;
 
-	public Integer cantidadDeEventosDeCola = 0;
-	private Integer acumuladorClientesEnCola = 0;
+	private Double acumuladorClientesEnCola = 0.0;
+	private Double ultimoTiempoCambioLongitudDeCola = 0.0;
+	private Double acumuladorTiempo = 0.00;
+	private Integer previaLongitudCola = 0;
+	private Integer longitudMaximaDeCola = 0;
 
 	public Integer cantidadDeClientes = 0;
 	private Double acumuladorTiemposDeClientes = 0.00;
 
 	private Double tiempoLibreEmpleada = 0.00;
+	// Tiempo de turno en MINUTOS
 	public Double tiempoDeTurno = 0.00;
 
 	@Override
@@ -32,12 +36,17 @@ public  class ContadoresEstadisticosSeguimiento3 extends ContadoresEstadisticos 
 		return beneficioTotal;
 	}
 
-	public void actualizarLongitudDeColaActual(Integer longCola){
-		acumuladorClientesEnCola += longCola;
-		cantidadDeEventosDeCola++;
+	public void actualizarLongitudDeColaActual(Integer longCola, Double tiempo){
+		Double tiempoEnCantidadPrevia = tiempo - ultimoTiempoCambioLongitudDeCola;
+		longitudMaximaDeCola = Math.max(longitudMaximaDeCola,longCola);
+		acumuladorTiempo+= tiempoEnCantidadPrevia;
+		double peso = tiempoEnCantidadPrevia * previaLongitudCola;
+		acumuladorClientesEnCola += peso;
+		ultimoTiempoCambioLongitudDeCola = tiempo;
+		previaLongitudCola = longCola;
 	}
 	public Double obtenerPromedioLongitudCola(){
-		return acumuladorClientesEnCola.doubleValue() / cantidadDeEventosDeCola.doubleValue();
+		return acumuladorClientesEnCola / acumuladorTiempo;
 	}
 
 	public void agregarTiempoCliente(Double tiempo){
@@ -52,12 +61,12 @@ public  class ContadoresEstadisticosSeguimiento3 extends ContadoresEstadisticos 
 		tiempoDeTurno = tiempo;
 	}
 
-	public Double obtenerTasaDeAtencion(){
-		return cantidadDeClientes.doubleValue() / tiempoDeTurno;
+	public Double obtenerTasaDeAtencionPorHora(){
+		return cantidadDeClientes.doubleValue() / (tiempoDeTurno/60);
 	}
 
-	public void setearTiempoLibreEmpleada(Double tiempo){
-		tiempoLibreEmpleada = tiempo;
+	public void agregarTiempoLibreEmpleada(Double tiempo){
+		tiempoLibreEmpleada += tiempo;
 	}
 
 	public Double obtenerPorcentajeDeTiempoLibreEmpleada(){

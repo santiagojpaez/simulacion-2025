@@ -27,12 +27,8 @@ public class GeneradorDeReportesSeguimiento3 extends GeneradorDeReportes {
 
 		// 2. Promedio de longitud de cola
 		// Se verifica que haya habido eventos de cola para evitar división por cero
-		if (contadoresSeguimiento3.cantidadDeEventosDeCola > 0) {
-			System.out.printf("Promedio de Longitud de Cola (Lq): %.4f clientes\n",
-					contadoresSeguimiento3.obtenerPromedioLongitudCola());
-		} else {
-			System.out.println("Promedio de Longitud de Cola (Lq): 0.0000 clientes (No hubo eventos de cola)");
-		}
+		System.out.printf("Promedio de Longitud de Cola (Lq): %.4f clientes\n",
+				contadoresSeguimiento3.obtenerPromedioLongitudCola());
 
 		// 3. Promedio de tiempo de los clientes en cola (Wq)
 		// Se verifica que haya habido clientes para evitar división por cero
@@ -47,7 +43,7 @@ public class GeneradorDeReportesSeguimiento3 extends GeneradorDeReportes {
 		// Se verifica que el tiempo de turno sea positivo para evitar división por cero
 		if (contadoresSeguimiento3.tiempoDeTurno > 0.0) {
 			System.out.printf("Tasa de Atención : %.4f clientes/unidad de tiempo\n",
-					contadoresSeguimiento3.obtenerTasaDeAtencion());
+					contadoresSeguimiento3.obtenerTasaDeAtencionPorHora());
 		} else {
 			System.out.println("Tasa de Atención : N/A (Tiempo de Turno no establecido o es cero)");
 		}

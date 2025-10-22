@@ -24,6 +24,10 @@ public class EstadoSeguimiento3 extends EstadoDelSistema {
         return cola.solicitudPrioritaria();
     }
 
+    public Integer obtenerTamanioColaSeguimiento(){
+        return cola.getCantSolicitudesEsperando();
+    }
+
     public void atenderSolicitud(SolicitudSeguimiento solicitudAProcesar) {
         servidor.atenderSolicitud(solicitudAProcesar);
     }
@@ -34,5 +38,13 @@ public class EstadoSeguimiento3 extends EstadoDelSistema {
 
     public void encolarSolicitud(SolicitudSeguimiento solicitudParaAgregar) {
         cola.encolarSolicitud(solicitudParaAgregar);
+    }
+
+    public void setTiempoUltimaAtencion(Double tiempo){
+        servidor.setTiempoUltimaAtencion(tiempo);
+    }
+
+    public Double getTiempoUltimaAtencion(){
+        return servidor.getTiempoUltimaAtencion();
     }
 }

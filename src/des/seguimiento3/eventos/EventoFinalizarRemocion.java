@@ -1,4 +1,20 @@
 package seguimiento3.eventos;
 
-public class EventoFinalizarRemocion {
+import des.Evento;
+import seguimiento3.componentesPropios.ContadoresEstadisticosSeguimiento3;
+import seguimiento3.estadoDelSistema.EstadoSeguimiento3;
+
+public class EventoFinalizarRemocion extends Evento {
+
+    public EventoFinalizarRemocion(double tiempoQueFaltaParaQueOcurra) {
+        super(tiempoQueFaltaParaQueOcurra);
+    }
+
+    @Override
+    public void rutinaDeEvento(des.EstadoDelSistema modelo, des.ContadoresEstadisticos contadores, des.ListaDeEventos eventos, des.LibreriaDeRutinas libreria) {
+        ContadoresEstadisticosSeguimiento3 cont = (ContadoresEstadisticosSeguimiento3) contadores;
+        EstadoSeguimiento3 estado = (EstadoSeguimiento3) modelo;
+        Integer longitudCola = estado.obtenerTamanioColaSeguimiento();
+        cont.actualizarLongitudDeColaActual(longitudCola,this.getTiempoDeOcurrencia());
+    }
 }

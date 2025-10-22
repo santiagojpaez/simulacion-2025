@@ -21,5 +21,10 @@ public class SolicitudSeguimiento{
         return tiempoDeArribo;
     }
 
-    
+    public void setTiempoEnKiosko(Double tiempoEnKiosko) {
+            this.tiempoEnKiosko = tiempoEnKiosko;
+    }
+    public Double getTiempoEnKiosko(){
+        return this.tiempoEnKiosko;
+    }
 }

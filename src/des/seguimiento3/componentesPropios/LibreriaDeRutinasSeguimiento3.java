@@ -35,10 +35,12 @@ public  class LibreriaDeRutinasSeguimiento3 extends LibreriaDeRutinas {
 
     public Integer cantidadDeUnidadesProductoPanaderia(){
         double rnd = Math.random();
-        if (rnd < 0.27) return 1;
-        if (rnd < 0.52) return 2;
-        if (rnd < 0.87) return 3;
-        return 4;
+        return switch (rnd) {
+            case double v when v < 0.27 -> 1;
+            case double v when v < 0.52 -> 2;
+            case double v when v < 0.87 -> 3;
+            default -> 4;
+        };
     }
 
     public Double obtenerTiempoServicioBebida(Integer cant){

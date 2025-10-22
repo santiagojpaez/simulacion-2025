@@ -5,10 +5,7 @@ import java.util.Optional;
 
 public class ServidorSeguimiento {
 	Optional<SolicitudSeguimiento> solicitudEnProcesamiento; /* Solicitud que está siendo retenida en el servidor. */
-	private Double tiempoTotalLibre = 0.00;
 	private Double tiempoUltimaAtencion = 0.00;
-	private Integer cantidadClientesAtendidos = 0;
-	private Double duracionDeLaAtencion = 0.00 ;
 
 	public ServidorSeguimiento() {
 		super();
@@ -29,4 +26,11 @@ public class ServidorSeguimiento {
 		return solicitudQueSale;
 	}
 
+	public void setTiempoUltimaAtencion(Double tiempoUltimaAtencion) {
+		this.tiempoUltimaAtencion = tiempoUltimaAtencion;
+	}
+
+	public Double getTiempoUltimaAtencion(){
+		return tiempoUltimaAtencion;
+	}
 }

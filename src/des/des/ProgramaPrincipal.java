@@ -1,10 +1,10 @@
 package des;
 
-import ejercicio1.componentespropios.ContadoresEstadisticosEjercicio1;
-import ejercicio1.componentespropios.GeneradorDeReportesEjercicio1;
-import ejercicio1.componentespropios.LibreriaDeRutinasEjercicio1;
-import ejercicio1.estadodelsistema.EstadoEjercicio1;
-import ejercicio1.eventos.EventoArribarACola;
+import seguimiento3.eventos.EventoArribarACola;
+import seguimiento3.componentesPropios.ContadoresEstadisticosSeguimiento3;
+import seguimiento3.componentesPropios.GeneradorDeReportesSeguimiento3;
+import seguimiento3.componentesPropios.LibreriaDeRutinasSeguimiento3;
+import seguimiento3.estadoDelSistema.EstadoSeguimiento3;
 
 /* Subprograma que invoca a la Rutina de Tiempo para determinar evento inminente, 
  * transfiriendo el control a la Rutina de Evento asociada para que actualice el
@@ -61,12 +61,12 @@ public class ProgramaPrincipal {
 	//MODIFICAR para indicar el Estado del Sistema a Simnular
 	private static void crearComponentesDependientes() {
 		//TODO Aca se crean los componentes propios del modelo a ejecutar.
-		modelo = new EstadoEjercicio1();
-		contadores = new ContadoresEstadisticosEjercicio1();
-		reporte = new GeneradorDeReportesEjercicio1();
-		libreria = new LibreriaDeRutinasEjercicio1();
-		Evento primerEvento = 
-				new EventoArribarACola(((LibreriaDeRutinasEjercicio1) libreria).tiempoEntreArribosSolicitudes());
+		modelo = new EstadoSeguimiento3();
+		contadores = new ContadoresEstadisticosSeguimiento3();
+		reporte = new GeneradorDeReportesSeguimiento3();
+		libreria = new LibreriaDeRutinasSeguimiento3();
+		Evento primerEvento =
+				new EventoArribarACola(((LibreriaDeRutinasSeguimiento3) libreria).tiempoEntreArribosSolicitudes());
 		eventos = new ListaDeEventos(primerEvento);
 	}
 
@@ -75,8 +75,12 @@ public class ProgramaPrincipal {
 		//TODO Aca se debe programar según el fin sea por tiempo o cantidad.
 		
 		//Ejemplo por tiempo
-		int tiempoDeSimulacion = 10;
-		if(reloj.getValor() >= tiempoDeSimulacion) return true;
+		Integer tiempoDeSimulacion = 480;
+		if(reloj.getValor() >= tiempoDeSimulacion) {
+			ContadoresEstadisticosSeguimiento3 cont= (ContadoresEstadisticosSeguimiento3) contadores;
+			cont.setearTiempoDeTurno(tiempoDeSimulacion.doubleValue());
+			return true;
+		};
 		return false;
 		
 		//Ejemplo por cantidad: "Que se hayan procesado 15 solicitudes."

@@ -25,42 +25,42 @@ public  class ContadoresEstadisticosSeguimiento3 extends ContadoresEstadisticos 
 	public void inicializar() {
 	}
 
-	void sumarBeneficio(Integer beneficio){
+	public void sumarBeneficio(Integer beneficio){
 		beneficioTotal += beneficio;
 	}
-	Integer obtenerBeneficioTotal(){
+	public Integer obtenerBeneficioTotal(){
 		return beneficioTotal;
 	}
 
-	void actualizarLongitudDeColaActual(Integer longCola){
+	public void actualizarLongitudDeColaActual(Integer longCola){
 		acumuladorClientesEnCola += longCola;
 		cantidadDeEventosDeCola++;
 	}
-	Double obtenerPromedioLongitudCola(){
+	public Double obtenerPromedioLongitudCola(){
 		return acumuladorClientesEnCola.doubleValue() / cantidadDeEventosDeCola.doubleValue();
 	}
 
-	void agregarTiempoCliente(Double tiempo){
+	public void agregarTiempoCliente(Double tiempo){
 		acumuladorTiemposDeClientes+=tiempo;
 		cantidadDeClientes++;
 	}
-	Double obtenerPromedioTiempoClientesEnCola(){
+	public Double obtenerPromedioTiempoClientesEnCola(){
 		return acumuladorTiemposDeClientes / cantidadDeClientes.doubleValue();
 	}
 
-	void setearTiempoDeTurno(Double tiempo){
+	public void setearTiempoDeTurno(Double tiempo){
 		tiempoDeTurno = tiempo;
 	}
 
-	Double obtenerTasaDeAtencion(){
+	public Double obtenerTasaDeAtencion(){
 		return cantidadDeClientes.doubleValue() / tiempoDeTurno;
 	}
 
-	void setearTiempoLibreEmpleada(Double tiempo){
+	public void setearTiempoLibreEmpleada(Double tiempo){
 		tiempoLibreEmpleada = tiempo;
 	}
 
-	Double obtenerPorcentajeDeTiempoLibreEmpleada(){
+	public Double obtenerPorcentajeDeTiempoLibreEmpleada(){
 		return tiempoLibreEmpleada / tiempoDeTurno;
 	}
 

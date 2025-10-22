@@ -7,7 +7,7 @@ package des;
 /***************************************/
 
 public abstract class ContadoresEstadisticos {
-	
+
 	public abstract void inicializar();
 
 }

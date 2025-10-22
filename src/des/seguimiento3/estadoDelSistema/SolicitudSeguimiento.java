@@ -1,4 +1,4 @@
-package seguimiento3;
+package seguimiento3.estadoDelSistema;
 
 public class SolicitudSeguimiento{
     private Integer cantidadDeProductos;

@@ -1,4 +1,4 @@
-package seguimiento3;
+package seguimiento3.estadoDelSistema;
 
 public enum Producto{
     BEBIDA_SALUDABLE("Bebida saludable",600.0,1200.0),

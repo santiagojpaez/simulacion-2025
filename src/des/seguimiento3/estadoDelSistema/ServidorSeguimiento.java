@@ -1,4 +1,4 @@
-package seguimiento3;
+package seguimiento3.estadoDelSistema;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;

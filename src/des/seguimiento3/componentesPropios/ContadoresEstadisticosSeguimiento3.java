@@ -14,9 +14,8 @@ public  class ContadoresEstadisticosSeguimiento3 extends ContadoresEstadisticos 
 
 	private Double acumuladorClientesEnCola = 0.0;
 	private Double ultimoTiempoCambioLongitudDeCola = 0.0;
-	private Double acumuladorTiempo = 0.00;
+	public Double acumuladorTiempo = 0.00;
 	private Integer previaLongitudCola = 0;
-	private Integer longitudMaximaDeCola = 0;
 
 	public Integer cantidadDeClientes = 0;
 	private Double acumuladorTiemposDeClientes = 0.00;
@@ -38,7 +37,6 @@ public  class ContadoresEstadisticosSeguimiento3 extends ContadoresEstadisticos 
 
 	public void actualizarLongitudDeColaActual(Integer longCola, Double tiempo){
 		Double tiempoEnCantidadPrevia = tiempo - ultimoTiempoCambioLongitudDeCola;
-		longitudMaximaDeCola = Math.max(longitudMaximaDeCola,longCola);
 		acumuladorTiempo+= tiempoEnCantidadPrevia;
 		double peso = tiempoEnCantidadPrevia * previaLongitudCola;
 		acumuladorClientesEnCola += peso;
@@ -46,6 +44,11 @@ public  class ContadoresEstadisticosSeguimiento3 extends ContadoresEstadisticos 
 		previaLongitudCola = longCola;
 	}
 	public Double obtenerPromedioLongitudCola(){
+		Double tiempoEnCantidadPrevia = tiempoDeTurno - ultimoTiempoCambioLongitudDeCola;
+		acumuladorTiempo+= tiempoEnCantidadPrevia;
+		double peso = tiempoEnCantidadPrevia * previaLongitudCola;
+		acumuladorClientesEnCola+=peso;
+		ultimoTiempoCambioLongitudDeCola = tiempoDeTurno;
 		return acumuladorClientesEnCola / acumuladorTiempo;
 	}
 

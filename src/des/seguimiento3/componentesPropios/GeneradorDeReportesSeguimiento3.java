@@ -12,10 +12,10 @@ public class GeneradorDeReportesSeguimiento3 {
 		double beneficioTotal = contadoresSeguimiento3.obtenerBeneficioTotal();
 		resultados.put("Beneficio",beneficioTotal);
 		// Promedio de Tiempo de Clientes en Cola (Wq)
-		double promedioTiempoEnCola = contadoresSeguimiento3.cantidadDeClientes > 0
-				? contadoresSeguimiento3.obtenerPromedioTiempoClientesEnCola()
+		double promedioLongitudCola = contadoresSeguimiento3.acumuladorTiempo > 0
+				? contadoresSeguimiento3.obtenerPromedioLongitudCola()
 				: 0.0;
-		resultados.put("PromedioTiempoEnCola", promedioTiempoEnCola);
+		resultados.put("PromedioLongitudCola", promedioLongitudCola);
 
 		// Tasa de Atención
 		double tasaDeAtencion = contadoresSeguimiento3.tiempoDeTurno > 0.0
@@ -29,9 +29,11 @@ public class GeneradorDeReportesSeguimiento3 {
 				: 0.0;
 		resultados.put("PorcentajeTiempoLibre", porcentajeTiempoLibre);
 
-		// Utilización de la Empleada
-		double utilizacionEmpleada = 100.0 - porcentajeTiempoLibre;
-		resultados.put("UtilizacionEmpleada", utilizacionEmpleada);
+		// Tiempo Promedio en Kiosco (W)
+		double tiempoEnKiosco = contadoresSeguimiento3.cantidadDeClientes > 0
+				? contadoresSeguimiento3.obtenerPromedioTiempoClientesEnCola()
+				: 0.0;
+		resultados.put("TiempoEnKiosco", tiempoEnKiosco);
 
 		return resultados;
 	}

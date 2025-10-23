@@ -73,41 +73,41 @@ public class ProgramaPrincipal {
 		try (FileWriter writer = new FileWriter("resultados_simulacion.csv")) {
 			writer.write("Corrida,Beneficio,PromedioTiempoEnCola,TasaDeAtencion,PorcentajeTiempoLibre,UtilizacionEmpleada\n");
 			double sumaBeneficio = 0.0;
-			double sumaPromedioTiempoEnCola = 0.0;
+			double sumaPromedioLongitudCola = 0.0;
 			double sumaTasaDeAtencion = 0.0;
 			double sumaPorcentajeTiempoLibre = 0.0;
-			double sumaUtilizacionEmpleada = 0.0;
+			double sumaTiempoPromedioEnKiosco = 0.0;
 
 			for (int i = 0; i < resultadosTotales.size(); i++) {
 				Map<String, Double> resultados = resultadosTotales.get(i);
 				writer.write(String.format("%d,%.4f,%.4f,%.4f,%.2f,%.2f\n",
 						i + 1,
 						resultados.get("Beneficio"),
-						resultados.get("PromedioTiempoEnCola"),
+						resultados.get("PromedioLongitudCola"),
 						resultados.get("TasaDeAtencion"),
 						resultados.get("PorcentajeTiempoLibre"),
-						resultados.get("UtilizacionEmpleada")));
+						resultados.get("TiempoEnKiosco")));
 				sumaBeneficio += resultados.get("Beneficio");
-				sumaPromedioTiempoEnCola += resultados.get("PromedioTiempoEnCola");
+				sumaPromedioLongitudCola += resultados.get("PromedioLongitudCola");
 				sumaTasaDeAtencion += resultados.get("TasaDeAtencion");
 				sumaPorcentajeTiempoLibre += resultados.get("PorcentajeTiempoLibre");
-				sumaUtilizacionEmpleada += resultados.get("UtilizacionEmpleada");
+				sumaTiempoPromedioEnKiosco += resultados.get("TiempoEnKiosco");
 			}
 
 			int totalCorridas = resultadosTotales.size();
 			double promedioBeneficio = sumaBeneficio / totalCorridas;
-			double promedioTiempoEnCola = sumaPromedioTiempoEnCola / totalCorridas;
+			double promedioLongitudCola = sumaPromedioLongitudCola / totalCorridas;
 			double promedioTasaDeAtencion = sumaTasaDeAtencion / totalCorridas;
 			double promedioPorcentajeTiempoLibre = sumaPorcentajeTiempoLibre / totalCorridas;
-			double promedioUtilizacionEmpleada = sumaUtilizacionEmpleada / totalCorridas;
+			double promedioTiempoEnKiosco = sumaTiempoPromedioEnKiosco / totalCorridas;
 
 			// Imprimir los promedios en consola
 			System.out.println("Promedios de las corridas:");
 			System.out.printf("Promedio Beneficios totales %.4f\n",promedioBeneficio);
-			System.out.printf("Promedio Tiempo en Cola: %.4f\n", promedioTiempoEnCola);
 			System.out.printf("Promedio Tasa de Atención: %.4f\n", promedioTasaDeAtencion);
+			System.out.printf("Promedio Longitud Cola: %.4f\n", promedioLongitudCola);
 			System.out.printf("Promedio Porcentaje Tiempo Libre: %.2f\n", promedioPorcentajeTiempoLibre);
-			System.out.printf("Promedio Utilización Empleada: %.2f\n", promedioUtilizacionEmpleada);
+			System.out.printf("Promedio Tiempo en Kiosco: %.2f\n", promedioTiempoEnKiosco);
 
 			System.out.println("Resultados guardados en 'resultados_simulacion.csv'.");
 		} catch (IOException e) {
